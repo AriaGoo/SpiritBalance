@@ -259,12 +259,16 @@ input, button {
 .chip.custom {
   font-size: 12px;
   color: var(--ink-faint);
-  border-style: dashed;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
 }
 
 .chip.custom.active {
+  font-size: 12px;
   color: var(--accent);
-  border-style: solid;
+  border-color: var(--accent);
+  background: var(--accent-light);
+  padding: 8px 14px;
 }
 
 /* ===== Amount Chips ===== */
@@ -313,7 +317,63 @@ input, button {
 
 .amount-chip.active .amount-chip-sub {
   color: var(--accent);
-  opacity: 0.7;
+}
+
+/* ===== Multi-select Toggle ===== */
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.multi-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--ink-faint);
+  transition: color 0.15s ease;
+  user-select: none;
+}
+
+.multi-toggle.on {
+  color: var(--accent);
+}
+
+.multi-toggle-track {
+  width: 30px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--line);
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.multi-toggle.on .multi-toggle-track {
+  background: var(--accent);
+}
+
+.multi-toggle-knob {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.multi-toggle.on .multi-toggle-knob {
+  transform: translateX(14px);
+}
+
+.multi-toggle-label {
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 /* 自定义杯量chip */
@@ -390,6 +450,12 @@ input, button {
   color: var(--ink);
   outline: none;
   width: 100%;
+}
+
+.inline-input[type="number"]::-webkit-inner-spin-button,
+.inline-input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+  margin-left: 4px;
 }
 
 .inline-input::placeholder {
@@ -856,7 +922,9 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
     </div>
     <button class="direction-toggle" id="directionToggle">
       <span class="direction-label" id="directionLabel">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+        <span>白酒</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4"/><path d="M9 3 4 7l5 4"/><path d="M4 17h16"/><path d="M15 21l5-4-5-4"/></svg>
+        <span>啤酒</span>
       </span>
     </button>
   </header>
@@ -881,7 +949,7 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
             <button class="chip custom" id="bjCustomDegChip" onclick="toggleCustomBaijiuDegree()">自定义</button>
           </div>
           <div class="inline-input-wrap" id="bjCustomDegInput" style="display:none;">
-            <input type="number" class="inline-input" id="bjCustomDegVal" placeholder="输入度数" value="45">
+            <input type="number" class="inline-input" id="bjCustomDegVal" placeholder="输入度数" value="45" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
             <span class="inline-unit">度</span>
             <button class="inline-clear" onclick="clearCustomBaijiuDegree()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -889,7 +957,13 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
           </div>
         </div>
         <div class="field-group">
-          <label class="field-label">饮用量</label>
+          <div class="field-label-row">
+            <label class="field-label">饮用量</label>
+            <div class="multi-toggle" id="bjMultiToggle" onclick="toggleBjMultiSelect()">
+              <div class="multi-toggle-track"><div class="multi-toggle-knob"></div></div>
+              <span class="multi-toggle-label">多选</span>
+            </div>
+          </div>
           <div class="amount-chips">
             <button class="amount-chip" onclick="toggleBaijiuAmount(50, this)"><span class="amount-chip-label">1 两</span><span class="amount-chip-sub">50ml</span></button>
             <button class="amount-chip" onclick="toggleBaijiuAmount(100, this)"><span class="amount-chip-label">2 两</span><span class="amount-chip-sub">100ml</span></button>
@@ -904,7 +978,7 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
             </button>
           </div>
           <div class="inline-input-wrap" id="bjCustomAmtInput" style="display:none;">
-            <input type="number" class="inline-input" id="bjCustomAmtVal" placeholder="ml" value="100">
+            <input type="number" class="inline-input" id="bjCustomAmtVal" placeholder="ml" value="100" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
             <span class="inline-unit">ml</span>
             <button class="inline-clear" onclick="clearCustomBaijiuAmount()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -951,7 +1025,7 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
               <button class="chip custom" id="btbCustomAbvChip" onclick="toggleBtbCustomAbv()">自定义</button>
             </div>
             <div class="inline-input-wrap" id="btbCustomAbvInput" style="display:none;">
-              <input type="number" class="inline-input" id="btbCustomAbvVal" placeholder="%" value="4.0">
+              <input type="number" class="inline-input" id="btbCustomAbvVal" placeholder="%" value="4.0" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
               <span class="inline-unit">%</span>
               <button class="inline-clear" onclick="clearBtbCustomAbv()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -1012,19 +1086,19 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
         <div id="btb2AbvSection" style="display:none;">
           <div class="field-group">
             <div class="chips-row">
-              <button class="chip" onclick="selectBtb2Abv(2.5)">2.5%</button>
-              <button class="chip" onclick="selectBtb2Abv(3.0)">3.0%</button>
-              <button class="chip" onclick="selectBtb2Abv(3.1)">3.1%</button>
-              <button class="chip" onclick="selectBtb2Abv(3.3)">3.3%</button>
-              <button class="chip" onclick="selectBtb2Abv(3.5)">3.5%</button>
-              <button class="chip" onclick="selectBtb2Abv(4.0)">4.0%</button>
-              <button class="chip" onclick="selectBtb2Abv(4.5)">4.5%</button>
-              <button class="chip" onclick="selectBtb2Abv(5.0)">5.0%</button>
-              <button class="chip" onclick="selectBtb2Abv(5.5)">5.5%</button>
+              <button class="chip" data-abv="2.5" onclick="selectBtb2Abv(2.5)">2.5%</button>
+              <button class="chip" data-abv="3.0" onclick="selectBtb2Abv(3.0)">3.0%</button>
+              <button class="chip" data-abv="3.1" onclick="selectBtb2Abv(3.1)">3.1%</button>
+              <button class="chip" data-abv="3.3" onclick="selectBtb2Abv(3.3)">3.3%</button>
+              <button class="chip" data-abv="3.5" onclick="selectBtb2Abv(3.5)">3.5%</button>
+              <button class="chip" data-abv="4.0" onclick="selectBtb2Abv(4.0)">4.0%</button>
+              <button class="chip" data-abv="4.5" onclick="selectBtb2Abv(4.5)">4.5%</button>
+              <button class="chip" data-abv="5.0" onclick="selectBtb2Abv(5.0)">5.0%</button>
+              <button class="chip" data-abv="5.5" onclick="selectBtb2Abv(5.5)">5.5%</button>
               <button class="chip custom" id="btb2CustomAbvChip" onclick="toggleBtb2CustomAbv()">自定义</button>
             </div>
             <div class="inline-input-wrap" id="btb2CustomAbvInput" style="display:none;">
-              <input type="number" class="inline-input" id="btb2CustomAbvVal" placeholder="%" value="4.0">
+              <input type="number" class="inline-input" id="btb2CustomAbvVal" placeholder="%" value="4.0" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
               <span class="inline-unit">%</span>
               <button class="inline-clear" onclick="clearBtb2CustomAbv()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -1034,7 +1108,13 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
         </div>
 
         <div class="field-group">
-          <label class="field-label">包装规格</label>
+          <div class="field-label-row">
+            <label class="field-label">包装规格</label>
+            <div class="multi-toggle" id="btb2MultiToggle" onclick="toggleBtb2MultiSelect()">
+              <div class="multi-toggle-track"><div class="multi-toggle-knob"></div></div>
+              <span class="multi-toggle-label">多选</span>
+            </div>
+          </div>
           <div class="package-list-vertical">
             <div class="package-row">
               <button class="pkg-chip-vertical" id="pkg500" onclick="togglePackage(500)">瓶装 500ml</button>
@@ -1075,7 +1155,7 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
           </div>
           <div class="custom-inline-row">
             <div class="inline-input-wrap" id="beerCustomAmtInput" style="display:none;">
-              <input type="number" class="inline-input" id="beerCustomAmtVal" placeholder="ml" value="500">
+              <input type="number" class="inline-input" id="beerCustomAmtVal" placeholder="ml" value="500" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
               <span class="inline-unit">ml</span>
               <button class="inline-clear" onclick="clearBeerCustomAmt()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -1086,7 +1166,7 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
         </div>
       </section>
 
-      <section class="panel-section">
+      <section class="panel-section" id="btb2TargetDegSection">
         <div class="section-label">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/><path d="M8 5v14"/><path d="M12 5v14"/></svg>
           <span>白酒</span>
@@ -1094,15 +1174,15 @@ button, .chip, .amount-chip, .pkg-chip, .brand-row {
         <div class="field-group">
           <label class="field-label">目标酒精度</label>
           <div class="chips-row">
-            <button class="chip" onclick="selectBaijiuTargetDegree(38)">38°</button>
-            <button class="chip" onclick="selectBaijiuTargetDegree(42)">42°</button>
-            <button class="chip" onclick="selectBaijiuTargetDegree(50)">50°</button>
-            <button class="chip" onclick="selectBaijiuTargetDegree(52)">52°</button>
-            <button class="chip" onclick="selectBaijiuTargetDegree(53)">53°</button>
+            <button class="chip" data-degree="38" onclick="selectBaijiuTargetDegree(38)">38°</button>
+            <button class="chip" data-degree="42" onclick="selectBaijiuTargetDegree(42)">42°</button>
+            <button class="chip" data-degree="50" onclick="selectBaijiuTargetDegree(50)">50°</button>
+            <button class="chip" data-degree="52" onclick="selectBaijiuTargetDegree(52)">52°</button>
+            <button class="chip" data-degree="53" onclick="selectBaijiuTargetDegree(53)">53°</button>
             <button class="chip custom" id="btbCustomTargetChip" onclick="toggleBtb2CustomTarget()">自定义</button>
           </div>
           <div class="inline-input-wrap" id="btb2CustomTargetInput" style="display:none;">
-            <input type="number" class="inline-input" id="btb2CustomTargetVal" placeholder="输入度数" value="52">
+            <input type="number" class="inline-input" id="btb2CustomTargetVal" placeholder="输入度数" value="52" onfocus="this.setSelectionRange(this.value.length,this.value.length)">
             <span class="inline-unit">度</span>
             <button class="inline-clear" onclick="clearBtb2CustomTarget()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -1195,6 +1275,8 @@ const state = {
   packages: {},
   pkgCounts: { 500: 1, 330: 1, 250: 1 },
   beerCustomAmount: null,
+  bjMultiSelect: false,
+  btb2MultiSelect: false,
 };
 
 // ===== Helpers =====
@@ -1241,10 +1323,47 @@ document.getElementById('directionToggle').addEventListener('click', function() 
 
 function updateDirectionLabel() {
   const label = document.getElementById('directionLabel');
+  const arrowSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4"/><path d="M9 3 4 7l5 4"/><path d="M4 17h16"/><path d="M15 21l5-4-5-4"/></svg>';
   if (state.appMode === 'baijiu_to_beer') {
-    label.innerHTML = '<span>白酒</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span>啤酒</span>';
+    label.innerHTML = '<span>白酒</span>' + arrowSvg + '<span>啤酒</span>';
   } else {
-    label.innerHTML = '<span>啤酒</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span>白酒</span>';
+    label.innerHTML = '<span>啤酒</span>' + arrowSvg + '<span>白酒</span>';
+  }
+}
+
+
+// ===== Multi-select Toggle Functions =====
+function toggleBjMultiSelect() {
+  state.bjMultiSelect = !state.bjMultiSelect;
+  document.getElementById('bjMultiToggle').classList.toggle('on', state.bjMultiSelect);
+  if (!state.bjMultiSelect) {
+    // 切换到单选: 如果有多选,只保留第一个
+    if (state.baijiuAmounts.length > 1) {
+      const first = state.baijiuAmounts[0];
+      state.baijiuAmounts = [first];
+      document.querySelectorAll('#baijiuPanel .amount-chip:not(.custom-chip)').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('onclick') && el.getAttribute('onclick').includes('' + first));
+      });
+    }
+  }
+}
+
+function toggleBtb2MultiSelect() {
+  state.btb2MultiSelect = !state.btb2MultiSelect;
+  document.getElementById('btb2MultiToggle').classList.toggle('on', state.btb2MultiSelect);
+  if (!state.btb2MultiSelect) {
+    // 切换到单选: 如果有多选,只保留第一个
+    const pkgs = Object.keys(state.packages);
+    if (pkgs.length > 1) {
+      const first = pkgs[0];
+      // 清除除第一个外的所有
+      for (let i = 1; i < pkgs.length; i++) {
+        delete state.packages[pkgs[i]];
+        document.getElementById('pkg' + pkgs[i]).classList.remove('on');
+        document.getElementById('pkg' + pkgs[i] + 'Counter').style.display = 'none';
+      }
+    }
+    calculateBtb2();
   }
 }
 
@@ -1299,8 +1418,20 @@ function toggleBaijiuAmount(val, el) {
     state.baijiuAmounts.splice(idx, 1);
     el.classList.remove('active');
   } else {
+    if (!state.bjMultiSelect) {
+      // 单选模式: 清除之前所有选择
+      state.baijiuAmounts.forEach(v => {
+        document.querySelectorAll('#baijiuPanel .amount-chip').forEach(chip => {
+          if (chip.getAttribute('onclick') && chip.getAttribute('onclick').includes('' + v)) {
+            chip.classList.remove('active');
+          }
+        });
+      });
+      state.baijiuAmounts = [];
+    }
     state.baijiuAmounts.push(val);
     el.classList.add('active');
+    clearCustomBaijiuAmount();
   }
   calculateBtb();
 }
@@ -1314,6 +1445,8 @@ function toggleCustomBaijiuAmount() {
     document.getElementById('bjCustomAmtChip').classList.add('active');
     document.getElementById('bjCustomAmtLabel').textContent = '';
     document.getElementById('bjCustomAmtSub').style.display = 'none';
+    document.querySelectorAll('#baijiuPanel .amount-chip:not(.custom-chip)').forEach(el => el.classList.remove('active'));
+    state.baijiuAmounts = [];
   }
   calculateBtb();
 }
@@ -1401,7 +1534,7 @@ function selectBtbAbv(abv) {
     document.getElementById('btbCustomAbvChip').textContent = '自定义';
     document.getElementById('btbCustomAbvChip').classList.remove('active');
   }
-  updateChipActive('baijiuPanel', '#btbAbvSection .chip[data-abv]', state.btbBeerAbv !== null ? state.btbBeerAbv + '' : null);
+  updateChipActive('baijiuPanel', '#btbAbvSection .chip[data-abv]', state.btbBeerAbv !== null ? state.btbBeerAbv.toFixed(1) : null);
   calculateBtb();
 }
 
@@ -1530,6 +1663,7 @@ function selectBtb2Abv(abv) {
     document.getElementById('btb2CustomAbvChip').textContent = '自定义';
     document.getElementById('btb2CustomAbvChip').classList.remove('active');
   }
+  updateChipActive('beerPanel', '#btb2AbvSection .chip[data-abv]', state.btb2BeerAbv !== null ? state.btb2BeerAbv.toFixed(1) : null);
   calculateBtb2();
 }
 
@@ -1542,6 +1676,7 @@ function toggleBtb2CustomAbv() {
     document.getElementById('btb2CustomAbvInput').style.display = 'flex';
     document.getElementById('btb2CustomAbvChip').textContent = '4.0%';
     document.getElementById('btb2CustomAbvChip').classList.add('active');
+    updateChipActive('beerPanel', '#btb2AbvSection .chip[data-abv]', null);
   }
   calculateBtb2();
 }
@@ -1568,6 +1703,14 @@ function togglePackage(val) {
     document.getElementById('pkg' + val).classList.remove('on');
     document.getElementById('pkg' + val + 'Counter').style.display = 'none';
   } else {
+    if (!state.btb2MultiSelect) {
+      // 单选模式: 清除之前所有选择
+      Object.keys(state.packages).forEach(k => {
+        document.getElementById('pkg' + k).classList.remove('on');
+        document.getElementById('pkg' + k + 'Counter').style.display = 'none';
+      });
+      state.packages = {};
+    }
     state.packages[val] = true;
     state.pkgCounts[val] = state.pkgCounts[val] || 1;
     document.getElementById('pkg' + val).classList.add('on');
@@ -1616,6 +1759,7 @@ function selectBaijiuTargetDegree(deg) {
     document.getElementById('btbCustomTargetChip').textContent = '自定义';
     document.getElementById('btbCustomTargetChip').classList.remove('active');
   }
+  updateChipActive('beerPanel', '#btb2TargetDegSection .chip[data-degree]', state.btb2TargetDegree !== null ? state.btb2TargetDegree + '' : null);
   calculateBtb2();
 }
 
@@ -1628,6 +1772,7 @@ function toggleBtb2CustomTarget() {
     document.getElementById('btb2CustomTargetInput').style.display = 'flex';
     document.getElementById('btbCustomTargetChip').textContent = '52°';
     document.getElementById('btbCustomTargetChip').classList.add('active');
+    updateChipActive('beerPanel', '#btb2TargetDegSection .chip[data-degree]', null);
   }
   calculateBtb2();
 }
@@ -1687,9 +1832,15 @@ function calculateBtb2() {
 function updateChipActive(panelId, selector, activeValue) {
   const panel = document.getElementById(panelId);
   if (!panel) return;
-  panel.querySelectorAll(selector).forEach(el => {
-    el.classList.toggle('active', el.getAttribute('data-abv') === activeValue || el.getAttribute('data-degree') === activeValue);
-  });
+  const chips = panel.querySelectorAll(selector);
+  chips.forEach(el => el.classList.remove('active'));
+  if (activeValue !== null) {
+    chips.forEach(el => {
+      if (el.getAttribute('data-abv') === activeValue || el.getAttribute('data-degree') === activeValue) {
+        el.classList.add('active');
+      }
+    });
+  }
 }
 
 // ===== Disclaimer =====
@@ -1712,10 +1863,6 @@ setTimeout(function() {
   if (c) { c.style.display = 'none'; }
   if (b) { b.innerHTML = '&#x300C;&#x9690;&#x79C1;&amp;&#x514D;&#x8D23;&#x58F0;&#x660E; &#x25B2;&#x300D;'; }
 }, 10000);
-
-// ===== Init =====
-updateDirectionLabel();
 </script>
 </body>
 </html>
-                                                  
