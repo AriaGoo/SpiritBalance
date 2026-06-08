@@ -1,15 +1,1721 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>斟酌 | Spirit Balance</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>斟酌 | Spirit Balance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+
+<style>
+/* ===== 雅致色彩体系 ===== */
+:root {
+  --bg: #FAF8F5;
+  --surface: #FFFFFF;
+  --ink: #2C2C2C;
+  --ink-light: #5A5A5A;
+  --ink-faint: #9B9B9B;
+  --accent: #8B7355;
+  --accent-light: #F0EBE3;
+  --accent-hover: #7A6548;
+  --line: #EBE7E0;
+  --line-light: #F3F0EB;
+  --success: #7BA87B;
+  --warn: #C9A25F;
+  --danger: #C07A7A;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --shadow: 0 1px 4px rgba(44, 44, 44, 0.035);
+}
+
+/* ===== 全局 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Noto Serif SC", "ZCOOL XiaoWei", "Songti SC", "STSong", "SimSun", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+input, button {
+  font-family: inherit;
+}
+
+/* ===== 容器 ===== */
+.app-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Header ===== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px 4px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.app-title-cn {
+  font-family: "ZCOOL XiaoWei", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 6px;
+}
+
+.app-title-en {
+  font-family: -apple-system, "PingFang SC", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* 方向切换 */
+.direction-toggle {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.direction-toggle:active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.direction-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+/* ===== Body ===== */
+.app-body {
+  padding: 16px 18px;
+}
+
+.panel-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===== Section ===== */
+.panel-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line-light);
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-light);
+}
+
+.section-label svg {
+  color: var(--accent);
+}
+
+/* ===== Field ===== */
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-light);
+  margin-bottom: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Subtabs ===== */
+.subtabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  background: var(--bg);
+  border-radius: var(--radius-xs);
+  padding: 3px;
+}
+
+.subtab {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.subtab.on {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Chips ===== */
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-light);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.chip.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.chip.custom {
+  font-size: 12px;
+  color: var(--ink-faint);
+  border-style: dashed;
+}
+
+.chip.custom.active {
+  color: var(--accent);
+  border-style: solid;
+}
+
+/* ===== Amount Chips ===== */
+.amount-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.amount-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  gap: 2px;
+}
+
+.amount-chip:active {
+  transform: scale(0.96);
+}
+
+.amount-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.amount-chip-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-light);
+}
+
+.amount-chip.active .amount-chip-label {
+  color: var(--accent);
+}
+
+.amount-chip-sub {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.amount-chip.active .amount-chip-sub {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+/* 自定义杯量chip */
+.custom-chip {
+  border-style: dashed;
+  position: relative;
+}
+
+.custom-chip .amount-chip-label {
+  color: var(--ink-faint);
+}
+
+.custom-chip.active {
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.custom-chip.active .amount-chip-label {
+  color: var(--accent);
+}
+
+.chip-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  outline: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.chip-input::placeholder {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.chip-clear {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  background: var(--line);
+  color: var(--ink-faint);
+  cursor: pointer;
+}
+
+/* ===== Inline Input ===== */
+.inline-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: var(--radius-xs);
+}
+
+.inline-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+}
+
+.inline-input::placeholder {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.inline-unit {
+  font-size: 12px;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.inline-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: var(--line);
+  color: var(--ink-faint);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.custom-inline-row {
+  margin-top: 8px;
+}
+
+.add-custom-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-custom-btn:active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ===== Brand Trigger & Dropdown ===== */
+.brand-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--ink-light);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.brand-trigger:active {
+  border-color: var(--accent);
+}
+
+.brand-trigger-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.brand-trigger-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: "Noto Serif SC", "ZCOOL XiaoWei", "Songti SC", "STSong", "SimSun", serif;
+}
+
+.brand-trigger-meta {
+  font-size: 11px;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.brand-trigger-placeholder {
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+/* 向下展开 - 啤酒转白酒 */
+.brand-dropdown {
+  margin-top: 6px;
+  max-height: 315px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+/* 向上展开 - 白酒转啤酒 */
+.brand-dropdown-up {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 315px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 30;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  border-bottom: 1px solid var(--line-light);
+  background: var(--surface);
+  cursor: pointer;
+  transition: background 0.1s ease;
+  text-align: left;
+}
+
+.brand-row:last-child {
+  border-bottom: none;
+}
+
+.brand-row:active {
+  background: var(--bg);
+}
+
+.brand-row.on {
+  background: var(--accent-light);
+}
+
+.brand-row-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.brand-row-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: "Noto Serif SC", "ZCOOL XiaoWei", "Songti SC", "STSong", "SimSun", serif;
+}
+
+.brand-row-meta {
+  font-size: 11px;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.brand-row-abv {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-family: "Noto Serif SC", serif;
+}
+
+/* ===== Package Vertical ===== */
+.package-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.package-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pkg-chip-vertical {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-light);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.pkg-chip-vertical:active {
+  transform: scale(0.99);
+}
+
+.pkg-chip-vertical.on {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* 数量计数器 */
+.pkg-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 10px;
+  background: var(--bg);
+  border-radius: var(--radius-xs);
+}
+
+.cnt-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface);
+  color: var(--ink-light);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+}
+
+.cnt-btn:active {
+  background: var(--line);
+  transform: scale(0.95);
+}
+
+.cnt-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 24px;
+  text-align: center;
+  font-family: "Noto Serif SC", "ZCOOL XiaoWei", "Songti SC", "STSong", "SimSun", serif;
+}
+
+/* ===== 结果区域 ===== */
+.result-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line-light);
+  text-align: center;
+}
+
+.result-main-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.result-inline-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+
+.result-number {
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.result-number.secondary {
+  font-size: 28px;
+  opacity: 0.75;
+}
+
+.result-unit {
+  font-size: 14px;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+.result-divider {
+  font-size: 18px;
+  color: var(--line);
+  margin: 0 4px;
+}
+
+.result-meta {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+
+.result-meta strong {
+  color: var(--ink-light);
+  font-weight: 600;
+}
+
+.result-meta-dot {
+  margin: 0 6px;
+  opacity: 0.5;
+}
+
+.result-impact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--bg);
+  font-size: 12px;
+}
+
+.impact-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.impact-dot.impact-low {
+  background: var(--success);
+}
+
+.impact-dot.impact-mid {
+  background: var(--warn);
+}
+
+.impact-dot.impact-high {
+  background: var(--danger);
+}
+
+.impact-text {
+  color: var(--ink-light);
+  font-weight: 500;
+}
+
+/* ===== 安全区域 ===== */
+.app-container {
+  padding-bottom: 80px;
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .app-container {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== 禁止选择 ===== */
+button, .chip, .amount-chip, .pkg-chip, .brand-row {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ===== 滚动条 ===== */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+
+/* ===== Footer ===== */
+.app-footer {
+  text-align: center;
+  padding: 30px 20px 40px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--line);
+  margin-top: 20px;
+  font-family: "ZCOOL XiaoWei", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+}
+
+.footer-line {
+  margin: 4px 0;
+  letter-spacing: 0.5px;
+}
+
+.footer-disclaimer {
+  margin-top: 12px;
+}
+
+.disclaimer-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  color: var(--ink-faint);
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-family: inherit;
+  padding: 4px 8px;
+  transition: color 0.15s ease;
+}
+
+.disclaimer-toggle:hover {
+  color: var(--accent);
+}
+
+.disclaimer-content {
+  max-width: 520px;
+  margin: 10px auto 0;
+  padding: 14px 16px;
+  line-height: 1.7;
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-align: left;
+  background: var(--bg);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--line-light);
+}
+
+.disclaimer-section-title {
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  color: var(--ink-light);
+  font-size: 11px;
+}
+
+.disclaimer-text {
+  margin: 0 0 4px 0;
+}
+
+.disclaimer-text:last-child {
+  margin-bottom: 0;
+}
+
+</style>
+</head>
+<body>
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo-area">
+      <img src="data:image/png;base64,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" alt="斟酌" class="app-logo">
+      <div class="title-group">
+        <h1 class="app-title-cn">斟酌</h1>
+        <span class="app-title-en">Spirit Balance</span>
+      </div>
+    </div>
+    <button class="direction-toggle" id="directionToggle">
+      <span class="direction-label" id="directionLabel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+      </span>
+    </button>
+  </header>
+
+  <!-- Body -->
+  <main class="app-body" id="appBody">
+    <!-- Baijiu to Beer Panel -->
+    <div class="panel-container" id="baijiuPanel" style="display:block;">
+      <section class="panel-section">
+        <div class="section-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/><path d="M8 5v14"/><path d="M12 5v14"/></svg>
+          <span>白酒</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label">酒精度</label>
+          <div class="chips-row">
+            <button class="chip" data-degree="38" onclick="selectBaijiuDegree(38)">38°</button>
+            <button class="chip" data-degree="42" onclick="selectBaijiuDegree(42)">42°</button>
+            <button class="chip" data-degree="50" onclick="selectBaijiuDegree(50)">50°</button>
+            <button class="chip" data-degree="52" onclick="selectBaijiuDegree(52)">52°</button>
+            <button class="chip" data-degree="53" onclick="selectBaijiuDegree(53)">53°</button>
+            <button class="chip custom" id="bjCustomDegChip" onclick="toggleCustomBaijiuDegree()">自定义</button>
+          </div>
+          <div class="inline-input-wrap" id="bjCustomDegInput" style="display:none;">
+            <input type="number" class="inline-input" id="bjCustomDegVal" placeholder="输入度数" value="45">
+            <span class="inline-unit">度</span>
+            <button class="inline-clear" onclick="clearCustomBaijiuDegree()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">饮用量</label>
+          <div class="amount-chips">
+            <button class="amount-chip" onclick="toggleBaijiuAmount(50, this)"><span class="amount-chip-label">1 两</span><span class="amount-chip-sub">50ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(100, this)"><span class="amount-chip-label">2 两</span><span class="amount-chip-sub">100ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(125, this)"><span class="amount-chip-label">2.5 两</span><span class="amount-chip-sub">125ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(165, this)"><span class="amount-chip-label">3.5 两</span><span class="amount-chip-sub">165ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(250, this)"><span class="amount-chip-label">半 斤</span><span class="amount-chip-sub">250ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(400, this)"><span class="amount-chip-label">8 两</span><span class="amount-chip-sub">400ml</span></button>
+            <button class="amount-chip" onclick="toggleBaijiuAmount(500, this)"><span class="amount-chip-label">1 斤</span><span class="amount-chip-sub">500ml</span></button>
+            <button class="amount-chip custom-chip" id="bjCustomAmtChip" onclick="toggleCustomBaijiuAmount()">
+              <span class="amount-chip-label" id="bjCustomAmtLabel">+ 自定义</span>
+              <span class="amount-chip-sub" id="bjCustomAmtSub">输入ml</span>
+            </button>
+          </div>
+          <div class="inline-input-wrap" id="bjCustomAmtInput" style="display:none;">
+            <input type="number" class="inline-input" id="bjCustomAmtVal" placeholder="ml" value="100">
+            <span class="inline-unit">ml</span>
+            <button class="inline-clear" onclick="clearCustomBaijiuAmount()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/><path d="M8 5v14"/><path d="M12 5v14"/></svg>
+          <span>啤酒</span>
+        </div>
+        <div class="subtabs">
+          <button class="subtab on" id="btbBrandTab" onclick="setBtbMode('brand')">品牌</button>
+          <button class="subtab" id="btbAbvTab" onclick="setBtbMode('abv')">酒精度</button>
+        </div>
+        <div id="btbBrandSection">
+          <div class="field-group" style="position:relative;">
+            <button class="brand-trigger" onclick="toggleBtbBrandList()">
+              <div class="brand-trigger-inner" id="btbBrandTrigger" style="display:none;">
+                <span class="brand-trigger-name" id="btbBrandName"></span>
+                <span class="brand-trigger-meta" id="btbBrandMeta"></span>
+              </div>
+              <span class="brand-trigger-placeholder" id="btbBrandPlaceholder">选择啤酒品牌</span>
+              <svg id="btbBrandArrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="brand-dropdown-up" id="btbBrandDropdown" style="display:none;">
+            </div>
+          </div>
+        </div>
+        <div id="btbAbvSection" style="display:none;">
+          <div class="field-group">
+            <div class="chips-row">
+              <button class="chip" data-abv="2.5" onclick="selectBtbAbv(2.5)">2.5%</button>
+              <button class="chip" data-abv="3.0" onclick="selectBtbAbv(3.0)">3.0%</button>
+              <button class="chip" data-abv="3.1" onclick="selectBtbAbv(3.1)">3.1%</button>
+              <button class="chip" data-abv="3.3" onclick="selectBtbAbv(3.3)">3.3%</button>
+              <button class="chip" data-abv="3.5" onclick="selectBtbAbv(3.5)">3.5%</button>
+              <button class="chip" data-abv="4.0" onclick="selectBtbAbv(4.0)">4.0%</button>
+              <button class="chip" data-abv="4.5" onclick="selectBtbAbv(4.5)">4.5%</button>
+              <button class="chip" data-abv="5.0" onclick="selectBtbAbv(5.0)">5.0%</button>
+              <button class="chip" data-abv="5.5" onclick="selectBtbAbv(5.5)">5.5%</button>
+              <button class="chip custom" id="btbCustomAbvChip" onclick="toggleBtbCustomAbv()">自定义</button>
+            </div>
+            <div class="inline-input-wrap" id="btbCustomAbvInput" style="display:none;">
+              <input type="number" class="inline-input" id="btbCustomAbvVal" placeholder="%" value="4.0">
+              <span class="inline-unit">%</span>
+              <button class="inline-clear" onclick="clearBtbCustomAbv()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="btbResult" style="display:none;">
+        <section class="result-section">
+          <div class="result-main-line">
+            <img src="data:image/png;base64,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" alt="啤酒" style="width:28px;height:28px;object-fit:contain;margin-right:4px;opacity:0.8;">
+            <span class="result-number" id="btbBottles"></span>
+            <span class="result-unit">瓶</span>
+            <span style="font-size:18px;color:var(--line);margin:0 4px;">|</span>
+            <span class="result-number secondary" id="btbCans"></span>
+            <span class="result-unit">听</span>
+          </div>
+          <div class="result-meta">
+            <span>纯酒精约 <strong id="btbPureAlcohol"></strong>ml</span>
+            <span class="result-meta-dot">·</span>
+            <span id="btbMetabolism"></span>
+          </div>
+          <div class="result-impact">
+            <span class="impact-dot" id="btbImpactDot"></span>
+            <span class="impact-text" id="btbImpactText"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Beer to Baijiu Panel -->
+    <div class="panel-container" id="beerPanel" style="display:none;">
+      <section class="panel-section">
+        <div class="section-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/><path d="M8 5v14"/><path d="M12 5v14"/></svg>
+          <span>啤酒</span>
+        </div>
+        <div class="subtabs">
+          <button class="subtab on" id="btbBrandTab2" onclick="setBtb2Mode('brand')">品牌</button>
+          <button class="subtab" id="btbAbvTab2" onclick="setBtb2Mode('abv')">酒精度</button>
+        </div>
+        <div id="btb2BrandSection">
+          <div class="field-group">
+            <button class="brand-trigger" onclick="toggleBtb2BrandList()">
+              <div class="brand-trigger-inner" id="btb2BrandTrigger" style="display:none;">
+                <span class="brand-trigger-name" id="btb2BrandName"></span>
+                <span class="brand-trigger-meta" id="btb2BrandMeta"></span>
+              </div>
+              <span class="brand-trigger-placeholder" id="btb2BrandPlaceholder">选择啤酒品牌</span>
+              <svg id="btb2BrandArrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="brand-dropdown" id="btb2BrandDropdown" style="display:none;">
+            </div>
+          </div>
+        </div>
+        <div id="btb2AbvSection" style="display:none;">
+          <div class="field-group">
+            <div class="chips-row">
+              <button class="chip" onclick="selectBtb2Abv(2.5)">2.5%</button>
+              <button class="chip" onclick="selectBtb2Abv(3.0)">3.0%</button>
+              <button class="chip" onclick="selectBtb2Abv(3.1)">3.1%</button>
+              <button class="chip" onclick="selectBtb2Abv(3.3)">3.3%</button>
+              <button class="chip" onclick="selectBtb2Abv(3.5)">3.5%</button>
+              <button class="chip" onclick="selectBtb2Abv(4.0)">4.0%</button>
+              <button class="chip" onclick="selectBtb2Abv(4.5)">4.5%</button>
+              <button class="chip" onclick="selectBtb2Abv(5.0)">5.0%</button>
+              <button class="chip" onclick="selectBtb2Abv(5.5)">5.5%</button>
+              <button class="chip custom" id="btb2CustomAbvChip" onclick="toggleBtb2CustomAbv()">自定义</button>
+            </div>
+            <div class="inline-input-wrap" id="btb2CustomAbvInput" style="display:none;">
+              <input type="number" class="inline-input" id="btb2CustomAbvVal" placeholder="%" value="4.0">
+              <span class="inline-unit">%</span>
+              <button class="inline-clear" onclick="clearBtb2CustomAbv()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">包装规格</label>
+          <div class="package-list-vertical">
+            <div class="package-row">
+              <button class="pkg-chip-vertical" id="pkg500" onclick="togglePackage(500)">瓶装 500ml</button>
+              <div class="pkg-counter" id="pkg500Counter" style="display:none;">
+                <button class="cnt-btn" onclick="adjustPkgCount(500, -1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+                </button>
+                <span class="cnt-val" id="pkg500Count">1</span>
+                <button class="cnt-btn" onclick="adjustPkgCount(500, 1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="package-row">
+              <button class="pkg-chip-vertical" id="pkg330" onclick="togglePackage(330)">听装 330ml</button>
+              <div class="pkg-counter" id="pkg330Counter" style="display:none;">
+                <button class="cnt-btn" onclick="adjustPkgCount(330, -1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+                </button>
+                <span class="cnt-val" id="pkg330Count">1</span>
+                <button class="cnt-btn" onclick="adjustPkgCount(330, 1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="package-row">
+              <button class="pkg-chip-vertical" id="pkg250" onclick="togglePackage(250)">小瓶 250ml</button>
+              <div class="pkg-counter" id="pkg250Counter" style="display:none;">
+                <button class="cnt-btn" onclick="adjustPkgCount(250, -1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+                </button>
+                <span class="cnt-val" id="pkg250Count">1</span>
+                <button class="cnt-btn" onclick="adjustPkgCount(250, 1, event)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="custom-inline-row">
+            <div class="inline-input-wrap" id="beerCustomAmtInput" style="display:none;">
+              <input type="number" class="inline-input" id="beerCustomAmtVal" placeholder="ml" value="500">
+              <span class="inline-unit">ml</span>
+              <button class="inline-clear" onclick="clearBeerCustomAmt()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <button class="add-custom-btn" id="beerAddCustomBtn" onclick="showBeerCustomAmt()">+ 自定义量</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/><path d="M8 5v14"/><path d="M12 5v14"/></svg>
+          <span>白酒</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label">目标酒精度</label>
+          <div class="chips-row">
+            <button class="chip" onclick="selectBaijiuTargetDegree(38)">38°</button>
+            <button class="chip" onclick="selectBaijiuTargetDegree(42)">42°</button>
+            <button class="chip" onclick="selectBaijiuTargetDegree(50)">50°</button>
+            <button class="chip" onclick="selectBaijiuTargetDegree(52)">52°</button>
+            <button class="chip" onclick="selectBaijiuTargetDegree(53)">53°</button>
+            <button class="chip custom" id="btbCustomTargetChip" onclick="toggleBtb2CustomTarget()">自定义</button>
+          </div>
+          <div class="inline-input-wrap" id="btb2CustomTargetInput" style="display:none;">
+            <input type="number" class="inline-input" id="btb2CustomTargetVal" placeholder="输入度数" value="52">
+            <span class="inline-unit">度</span>
+            <button class="inline-clear" onclick="clearBtb2CustomTarget()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div id="btb2Result" style="display:none;">
+        <section class="result-section">
+          <div class="result-main-line">
+            <img src="data:image/png;base64,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" alt="白酒" style="width:28px;height:28px;object-fit:contain;margin-right:4px;opacity:0.8;">
+            <span class="result-number" id="btb2Liang"></span>
+            <span class="result-unit">两</span>
+            <span style="font-size:18px;color:var(--line);margin:0 4px;">|</span>
+            <span class="result-number secondary" id="btb2Ml"></span>
+            <span class="result-unit">ml</span>
+          </div>
+          <div class="result-meta">
+            <span>纯酒精约 <strong id="btb2PureAlcohol"></strong>ml</span>
+            <span class="result-meta-dot">·</span>
+            <span id="btb2Metabolism"></span>
+          </div>
+          <div class="result-impact">
+            <span class="impact-dot" id="btb2ImpactDot"></span>
+            <span class="impact-text" id="btb2ImpactText"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer" style="text-align:center;padding:30px 20px 40px;font-size:12px;color:var(--ink-faint);border-top:1px solid var(--line);margin-top:20px;font-family:'Songti SC','STSong','SimSun',-apple-system,serif;">
+    <p style="margin:4px 0;letter-spacing:0.5px;">&copy; 2026 斟酌 | Spirit Balance. All rights reserved.</p>
+    <p style="margin:4px 0;letter-spacing:0.5px;">AriaGoo</p>
+    <div style="margin-top:12px;">
+      <button id="disclaimerToggle" style="background:none;border:none;cursor:pointer;user-select:none;color:var(--ink-faint);font-size:11px;letter-spacing:1px;font-family:inherit;padding:4px 8px;" onclick="toggleDisclaimer()">
+        &#x300C;&#x9690;&#x79C1;&amp;&#x514D;&#x8D23;&#x58F0;&#x660E; &#x25BC;&#x300D;
+      </button>
+      <div id="disclaimerContent" style="display:block;max-width:520px;margin:10px auto 0;padding:14px 16px;line-height:1.7;font-size:11px;color:var(--ink-faint);text-align:left;background:var(--bg);border-radius:var(--radius-xs);border:1px solid var(--line-light);">
+        <p style="margin:0 0 6px 0;font-weight:600;color:var(--ink-light);font-size:11px;">隐私声明</p>
+        <p style="margin:0 0 10px 0;">本页面为纯静态网页，不收集、存储或传输任何用户数据。所有计算均在您的设备本地完成。</p>
+        <p style="margin:0 0 6px 0;font-weight:600;color:var(--ink-light);font-size:11px;">免责声明</p>
+        <p style="margin:0 0 4px 0;">本工具仅供娱乐及参考，计算结果基于标准公式估算，不构成医学建议或饮酒指导。</p>
+        <p style="margin:0 0 4px 0;">实际酒精代谢受个体差异、身体状况、饮酒环境等多种因素影响。</p>
+        <p style="margin:0;">请理性饮酒，过量饮酒有害健康。未成年人禁止饮酒。</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ===== Data =====
+const BEER_BRANDS = [
+  { name: "青岛经典", og: "10.0°P", abv: 4.0, ratio: "1:2.5", taste: "清爽麦香" },
+  { name: "青岛纯生", og: "8.0°P", abv: 3.1, ratio: "1:2.58", taste: "鲜爽纯净" },
+  { name: "青岛白啤", og: "11.0°P", abv: 4.1, ratio: "1:2.68", taste: "果香醇厚" },
+  { name: "银麦金麦", og: "8.0°P", abv: 3.1, ratio: "1:2.58", taste: "麦香柔和" },
+  { name: "银麦经典", og: "10.0°P", abv: 3.3, ratio: "1:3.03", taste: "清爽淡爽" },
+  { name: "银麦纯生", og: "8.0°P", abv: 3.1, ratio: "1:2.58", taste: "清新爽口" },
+  { name: "雪花勇闯天涯", og: "8.0°P", abv: 3.0, ratio: "1:2.67", taste: "清爽畅快" },
+  { name: "雪花纯生", og: "8.0°P", abv: 3.1, ratio: "1:2.58", taste: "鲜爽柔和" },
+  { name: "雪花清爽", og: "8.0°P", abv: 2.9, ratio: "1:2.76", taste: "清淡爽口" },
+  { name: "燕京 U8", og: "8.0°P", abv: 2.5, ratio: "1:3.2", taste: "清爽低度" },
+  { name: "燕京 V10", og: "10.0°P", abv: 3.3, ratio: "1:3.03", taste: "醇厚麦香" },
+  { name: "燕京纯生", og: "10.0°P", abv: 3.6, ratio: "1:2.78", taste: "鲜爽顺滑" },
+  { name: "燕京清爽", og: "8.0°P", abv: 2.5, ratio: "1:3.2", taste: "清淡爽口" },
+  { name: "保拉纳黑啤", og: "12.4°P", abv: 5.3, ratio: "1:2.34", taste: "焦香浓郁" },
+  { name: "保拉纳白啤", og: "12.5°P", abv: 5.5, ratio: "1:2.27", taste: "麦香醇厚" },
+];
+
+// ===== State =====
+const state = {
+  appMode: 'baijiu_to_beer',
+  baijiuDegree: null,
+  baijiuCustomDegree: null,
+  baijiuAmounts: [],
+  baijiuCustomAmount: null,
+  btbBeerBrand: null,
+  btbBeerAbv: null,
+  btbBeerCustomAbv: null,
+  btbMode: 'brand',
+  btb2BeerBrand: null,
+  btb2BeerAbv: null,
+  btb2BeerCustomAbv: null,
+  btb2Mode: 'brand',
+  btb2TargetDegree: null,
+  btb2CustomTarget: null,
+  packages: {},
+  pkgCounts: { 500: 1, 330: 1, 250: 1 },
+  beerCustomAmount: null,
+};
+
+// ===== Helpers =====
+function calculatePureAlcohol(volume, abv) {
+  return volume * (abv / 100);
+}
+
+function calculateBeerEquivalent(pureAlcohol, beerAbv) {
+  const eqMl = pureAlcohol / (beerAbv / 100);
+  return {
+    bottles500: Math.round((eqMl / 500) * 10) / 10,
+    cans330: Math.round((eqMl / 330) * 10) / 10,
+    pureAlcohol: Math.round(pureAlcohol * 10) / 10,
+    metabolism: pureAlcohol < 100 ? '约6-8小时' : pureAlcohol < 200 ? '约12-16小时' : '约24小时以上',
+    impact: pureAlcohol < 100 ? '轻度负担' : pureAlcohol < 200 ? '中度负担' : '重度负担',
+  };
+}
+
+function calculateBaijiuEquivalent(pureAlcohol, baijiuDegree) {
+  const eqMl = pureAlcohol / (baijiuDegree / 100);
+  return {
+    liang: Math.round((eqMl / 50) * 10) / 10,
+    ml: Math.round(eqMl * 10) / 10,
+    pureAlcohol: Math.round(pureAlcohol * 10) / 10,
+    metabolism: pureAlcohol < 100 ? '约6-8小时' : pureAlcohol < 200 ? '约12-16小时' : '约24小时以上',
+    impact: pureAlcohol < 100 ? '轻度负担' : pureAlcohol < 200 ? '中度负担' : '重度负担',
+  };
+}
+
+// ===== Direction Toggle =====
+document.getElementById('directionToggle').addEventListener('click', function() {
+  state.appMode = state.appMode === 'baijiu_to_beer' ? 'beer_to_baijiu' : 'baijiu_to_beer';
+  const bjPanel = document.getElementById('baijiuPanel');
+  const beerPanel = document.getElementById('beerPanel');
+  if (state.appMode === 'baijiu_to_beer') {
+    bjPanel.style.display = 'block';
+    beerPanel.style.display = 'none';
+  } else {
+    bjPanel.style.display = 'none';
+    beerPanel.style.display = 'block';
+  }
+  updateDirectionLabel();
+});
+
+function updateDirectionLabel() {
+  const label = document.getElementById('directionLabel');
+  if (state.appMode === 'baijiu_to_beer') {
+    label.innerHTML = '<span>白酒</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span>啤酒</span>';
+  } else {
+    label.innerHTML = '<span>啤酒</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span>白酒</span>';
+  }
+}
+
+// ===== Baijiu to Beer Functions =====
+function selectBaijiuDegree(deg) {
+  if (state.baijiuDegree === deg) {
+    state.baijiuDegree = null;
+  } else {
+    state.baijiuDegree = deg;
+    state.baijiuCustomDegree = null;
+    document.getElementById('bjCustomDegInput').style.display = 'none';
+    document.getElementById('bjCustomDegChip').textContent = '自定义';
+    document.getElementById('bjCustomDegChip').classList.remove('active');
+  }
+  updateChipActive('baijiuPanel', '[data-degree]', state.baijiuDegree + '');
+  calculateBtb();
+}
+
+function toggleCustomBaijiuDegree() {
+  if (state.baijiuCustomDegree !== null) {
+    clearCustomBaijiuDegree();
+  } else {
+    state.baijiuCustomDegree = 45;
+    state.baijiuDegree = null;
+    document.getElementById('bjCustomDegInput').style.display = 'flex';
+    document.getElementById('bjCustomDegChip').textContent = '45°';
+    document.getElementById('bjCustomDegChip').classList.add('active');
+    updateChipActive('baijiuPanel', '[data-degree]', null);
+  }
+  calculateBtb();
+}
+
+function clearCustomBaijiuDegree() {
+  state.baijiuCustomDegree = null;
+  document.getElementById('bjCustomDegInput').style.display = 'none';
+  document.getElementById('bjCustomDegChip').textContent = '自定义';
+  document.getElementById('bjCustomDegChip').classList.remove('active');
+}
+
+document.getElementById('bjCustomDegVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0 && v <= 100) {
+    state.baijiuCustomDegree = v;
+    document.getElementById('bjCustomDegChip').textContent = v + '°';
+    calculateBtb();
+  }
+});
+
+function toggleBaijiuAmount(val, el) {
+  const idx = state.baijiuAmounts.indexOf(val);
+  if (idx >= 0) {
+    state.baijiuAmounts.splice(idx, 1);
+    el.classList.remove('active');
+  } else {
+    state.baijiuAmounts.push(val);
+    el.classList.add('active');
+  }
+  calculateBtb();
+}
+
+function toggleCustomBaijiuAmount() {
+  if (state.baijiuCustomAmount !== null) {
+    clearCustomBaijiuAmount();
+  } else {
+    state.baijiuCustomAmount = 100;
+    document.getElementById('bjCustomAmtInput').style.display = 'flex';
+    document.getElementById('bjCustomAmtChip').classList.add('active');
+    document.getElementById('bjCustomAmtLabel').textContent = '';
+    document.getElementById('bjCustomAmtSub').style.display = 'none';
+  }
+  calculateBtb();
+}
+
+function clearCustomBaijiuAmount() {
+  state.baijiuCustomAmount = null;
+  document.getElementById('bjCustomAmtInput').style.display = 'none';
+  document.getElementById('bjCustomAmtChip').classList.remove('active');
+  document.getElementById('bjCustomAmtLabel').textContent = '+ 自定义';
+  document.getElementById('bjCustomAmtSub').textContent = '输入ml';
+  document.getElementById('bjCustomAmtSub').style.display = 'block';
+}
+
+document.getElementById('bjCustomAmtVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0) {
+    state.baijiuCustomAmount = v;
+    calculateBtb();
+  }
+});
+
+// ===== BTB Mode & Brand =====
+function setBtbMode(mode) {
+  state.btbMode = mode;
+  document.getElementById('btbBrandTab').classList.toggle('on', mode === 'brand');
+  document.getElementById('btbAbvTab').classList.toggle('on', mode === 'abv');
+  document.getElementById('btbBrandSection').style.display = mode === 'brand' ? 'block' : 'none';
+  document.getElementById('btbAbvSection').style.display = mode === 'abv' ? 'block' : 'none';
+  calculateBtb();
+}
+
+// Populate brand dropdown
+function populateBtbBrandDropdown() {
+  const dropdown = document.getElementById('btbBrandDropdown');
+  dropdown.innerHTML = BEER_BRANDS.map(b => `
+    <button class="brand-row ${state.btbBeerBrand?.name === b.name ? 'on' : ''}" onclick="selectBtbBrand('${b.name}')">
+      <div class="brand-row-info">
+        <span class="brand-row-name">${b.name}</span>
+        <span class="brand-row-meta">原麦汁 ${b.og} · 醇干比 ${b.ratio} · ${b.taste}</span>
+      </div>
+      <span class="brand-row-abv">${b.abv}%</span>
+    </button>
+  `).join('');
+}
+populateBtbBrandDropdown();
+
+function toggleBtbBrandList() {
+  const dd = document.getElementById('btbBrandDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  const arrow = document.getElementById('btbBrandArrow');
+  if (dd.style.display === 'none') {
+    arrow.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  } else {
+    arrow.innerHTML = '<path d="m18 15-6-6-6 6"/>';
+  }
+}
+
+function selectBtbBrand(name) {
+  const brand = BEER_BRANDS.find(b => b.name === name);
+  state.btbBeerBrand = brand || null;
+  state.btbBeerAbv = null;
+  state.btbBeerCustomAbv = null;
+  document.getElementById('btbBrandDropdown').style.display = 'none';
+  document.getElementById('btbBrandArrow').innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  if (brand) {
+    document.getElementById('btbBrandTrigger').style.display = 'flex';
+    document.getElementById('btbBrandPlaceholder').style.display = 'none';
+    document.getElementById('btbBrandName').textContent = brand.name;
+    document.getElementById('btbBrandMeta').textContent = `原麦汁 ${brand.og} · 醇干比 ${brand.ratio} · ${brand.taste}`;
+  } else {
+    document.getElementById('btbBrandTrigger').style.display = 'none';
+    document.getElementById('btbBrandPlaceholder').style.display = 'block';
+  }
+  populateBtbBrandDropdown();
+  calculateBtb();
+}
+
+function selectBtbAbv(abv) {
+  if (state.btbBeerAbv === abv) {
+    state.btbBeerAbv = null;
+  } else {
+    state.btbBeerAbv = abv;
+    state.btbBeerCustomAbv = null;
+    document.getElementById('btbCustomAbvInput').style.display = 'none';
+    document.getElementById('btbCustomAbvChip').textContent = '自定义';
+    document.getElementById('btbCustomAbvChip').classList.remove('active');
+  }
+  updateChipActive('baijiuPanel', '#btbAbvSection .chip[data-abv]', state.btbBeerAbv !== null ? state.btbBeerAbv + '' : null);
+  calculateBtb();
+}
+
+function toggleBtbCustomAbv() {
+  if (state.btbBeerCustomAbv !== null) {
+    clearBtbCustomAbv();
+  } else {
+    state.btbBeerCustomAbv = 4.0;
+    state.btbBeerAbv = null;
+    document.getElementById('btbCustomAbvInput').style.display = 'flex';
+    document.getElementById('btbCustomAbvChip').textContent = '4.0%';
+    document.getElementById('btbCustomAbvChip').classList.add('active');
+    updateChipActive('baijiuPanel', '#btbAbvSection .chip[data-abv]', null);
+  }
+  calculateBtb();
+}
+
+function clearBtbCustomAbv() {
+  state.btbBeerCustomAbv = null;
+  document.getElementById('btbCustomAbvInput').style.display = 'none';
+  document.getElementById('btbCustomAbvChip').textContent = '自定义';
+  document.getElementById('btbCustomAbvChip').classList.remove('active');
+}
+
+document.getElementById('btbCustomAbvVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0 && v <= 20) {
+    state.btbBeerCustomAbv = v;
+    document.getElementById('btbCustomAbvChip').textContent = v + '%';
+    calculateBtb();
+  }
+});
+
+// ===== BTB Calculation =====
+function calculateBtb() {
+  const degree = state.baijiuDegree ?? state.baijiuCustomDegree ?? null;
+  let totalMl = state.baijiuAmounts.reduce((s, a) => s + a, 0);
+  if (state.baijiuCustomAmount) totalMl += state.baijiuCustomAmount;
+
+  const beerAbv = state.btbMode === 'brand' 
+    ? (state.btbBeerBrand?.abv ?? null)
+    : (state.btbBeerAbv ?? state.btbBeerCustomAbv ?? null);
+
+  if (!degree || totalMl <= 0 || !beerAbv) {
+    document.getElementById('btbResult').style.display = 'none';
+    return;
+  }
+
+  const pure = calculatePureAlcohol(totalMl, degree);
+  const result = calculateBeerEquivalent(pure, beerAbv);
+
+  document.getElementById('btbBottles').textContent = result.bottles500;
+  document.getElementById('btbCans').textContent = result.cans330;
+  document.getElementById('btbPureAlcohol').textContent = result.pureAlcohol;
+  document.getElementById('btbMetabolism').textContent = result.metabolism + '代谢';
+  document.getElementById('btbImpactText').textContent = result.impact;
+
+  const dot = document.getElementById('btbImpactDot');
+  dot.className = 'impact-dot impact-' + (result.impact === '轻度负担' ? 'low' : result.impact === '中度负担' ? 'mid' : 'high');
+
+  document.getElementById('btbResult').style.display = 'block';
+}
+
+// ===== Beer to Baijiu Functions =====
+function setBtb2Mode(mode) {
+  state.btb2Mode = mode;
+  document.getElementById('btbBrandTab2').classList.toggle('on', mode === 'brand');
+  document.getElementById('btbAbvTab2').classList.toggle('on', mode === 'abv');
+  document.getElementById('btb2BrandSection').style.display = mode === 'brand' ? 'block' : 'none';
+  document.getElementById('btb2AbvSection').style.display = mode === 'abv' ? 'block' : 'none';
+  calculateBtb2();
+}
+
+function populateBtb2BrandDropdown() {
+  const dropdown = document.getElementById('btb2BrandDropdown');
+  dropdown.innerHTML = BEER_BRANDS.map(b => `
+    <button class="brand-row ${state.btb2BeerBrand?.name === b.name ? 'on' : ''}" onclick="selectBtb2Brand('${b.name}')">
+      <div class="brand-row-info">
+        <span class="brand-row-name">${b.name}</span>
+        <span class="brand-row-meta">原麦汁 ${b.og} · 醇干比 ${b.ratio} · ${b.taste}</span>
+      </div>
+      <span class="brand-row-abv">${b.abv}%</span>
+    </button>
+  `).join('');
+}
+populateBtb2BrandDropdown();
+
+function toggleBtb2BrandList() {
+  const dd = document.getElementById('btb2BrandDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  const arrow = document.getElementById('btb2BrandArrow');
+  if (dd.style.display === 'none') {
+    arrow.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  } else {
+    arrow.innerHTML = '<path d="m18 15-6-6-6 6"/>';
+  }
+}
+
+function selectBtb2Brand(name) {
+  const brand = BEER_BRANDS.find(b => b.name === name);
+  state.btb2BeerBrand = brand || null;
+  state.btb2BeerAbv = null;
+  state.btb2BeerCustomAbv = null;
+  document.getElementById('btb2BrandDropdown').style.display = 'none';
+  document.getElementById('btb2BrandArrow').innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  if (brand) {
+    document.getElementById('btb2BrandTrigger').style.display = 'flex';
+    document.getElementById('btb2BrandPlaceholder').style.display = 'none';
+    document.getElementById('btb2BrandName').textContent = brand.name;
+    document.getElementById('btb2BrandMeta').textContent = `原麦汁 ${brand.og} · 醇干比 ${brand.ratio} · ${brand.taste}`;
+  } else {
+    document.getElementById('btb2BrandTrigger').style.display = 'none';
+    document.getElementById('btb2BrandPlaceholder').style.display = 'block';
+  }
+  populateBtb2BrandDropdown();
+  calculateBtb2();
+}
+
+function selectBtb2Abv(abv) {
+  if (state.btb2BeerAbv === abv) {
+    state.btb2BeerAbv = null;
+  } else {
+    state.btb2BeerAbv = abv;
+    state.btb2BeerCustomAbv = null;
+    document.getElementById('btb2CustomAbvInput').style.display = 'none';
+    document.getElementById('btb2CustomAbvChip').textContent = '自定义';
+    document.getElementById('btb2CustomAbvChip').classList.remove('active');
+  }
+  calculateBtb2();
+}
+
+function toggleBtb2CustomAbv() {
+  if (state.btb2BeerCustomAbv !== null) {
+    clearBtb2CustomAbv();
+  } else {
+    state.btb2BeerCustomAbv = 4.0;
+    state.btb2BeerAbv = null;
+    document.getElementById('btb2CustomAbvInput').style.display = 'flex';
+    document.getElementById('btb2CustomAbvChip').textContent = '4.0%';
+    document.getElementById('btb2CustomAbvChip').classList.add('active');
+  }
+  calculateBtb2();
+}
+
+function clearBtb2CustomAbv() {
+  state.btb2BeerCustomAbv = null;
+  document.getElementById('btb2CustomAbvInput').style.display = 'none';
+  document.getElementById('btb2CustomAbvChip').textContent = '自定义';
+  document.getElementById('btb2CustomAbvChip').classList.remove('active');
+}
+
+document.getElementById('btb2CustomAbvVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0 && v <= 20) {
+    state.btb2BeerCustomAbv = v;
+    calculateBtb2();
+  }
+});
+
+// ===== Package Functions =====
+function togglePackage(val) {
+  if (state.packages[val]) {
+    delete state.packages[val];
+    document.getElementById('pkg' + val).classList.remove('on');
+    document.getElementById('pkg' + val + 'Counter').style.display = 'none';
+  } else {
+    state.packages[val] = true;
+    state.pkgCounts[val] = state.pkgCounts[val] || 1;
+    document.getElementById('pkg' + val).classList.add('on');
+    document.getElementById('pkg' + val + 'Counter').style.display = 'flex';
+  }
+  calculateBtb2();
+}
+
+function adjustPkgCount(pkg, delta, event) {
+  if (event) event.stopPropagation();
+  state.pkgCounts[pkg] = Math.max(1, (state.pkgCounts[pkg] || 1) + delta);
+  document.getElementById('pkg' + pkg + 'Count').textContent = state.pkgCounts[pkg];
+  calculateBtb2();
+}
+
+function showBeerCustomAmt() {
+  state.beerCustomAmount = 500;
+  document.getElementById('beerCustomAmtInput').style.display = 'flex';
+  document.getElementById('beerAddCustomBtn').style.display = 'none';
+  calculateBtb2();
+}
+
+function clearBeerCustomAmt() {
+  state.beerCustomAmount = null;
+  document.getElementById('beerCustomAmtInput').style.display = 'none';
+  document.getElementById('beerAddCustomBtn').style.display = 'block';
+  calculateBtb2();
+}
+
+document.getElementById('beerCustomAmtVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0) {
+    state.beerCustomAmount = v;
+    calculateBtb2();
+  }
+});
+
+// ===== BTB2 Target Degree =====
+function selectBaijiuTargetDegree(deg) {
+  if (state.btb2TargetDegree === deg) {
+    state.btb2TargetDegree = null;
+  } else {
+    state.btb2TargetDegree = deg;
+    state.btb2CustomTarget = null;
+    document.getElementById('btb2CustomTargetInput').style.display = 'none';
+    document.getElementById('btbCustomTargetChip').textContent = '自定义';
+    document.getElementById('btbCustomTargetChip').classList.remove('active');
+  }
+  calculateBtb2();
+}
+
+function toggleBtb2CustomTarget() {
+  if (state.btb2CustomTarget !== null) {
+    clearBtb2CustomTarget();
+  } else {
+    state.btb2CustomTarget = 52;
+    state.btb2TargetDegree = null;
+    document.getElementById('btb2CustomTargetInput').style.display = 'flex';
+    document.getElementById('btbCustomTargetChip').textContent = '52°';
+    document.getElementById('btbCustomTargetChip').classList.add('active');
+  }
+  calculateBtb2();
+}
+
+function clearBtb2CustomTarget() {
+  state.btb2CustomTarget = null;
+  document.getElementById('btb2CustomTargetInput').style.display = 'none';
+  document.getElementById('btbCustomTargetChip').textContent = '自定义';
+  document.getElementById('btbCustomTargetChip').classList.remove('active');
+}
+
+document.getElementById('btb2CustomTargetVal').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v) && v > 0 && v <= 100) {
+    state.btb2CustomTarget = v;
+    document.getElementById('btbCustomTargetChip').textContent = v + '°';
+    calculateBtb2();
+  }
+});
+
+// ===== BTB2 Calculation =====
+function calculateBtb2() {
+  const beerAbv = state.btb2Mode === 'brand'
+    ? (state.btb2BeerBrand?.abv ?? null)
+    : (state.btb2BeerAbv ?? state.btb2BeerCustomAbv ?? null);
+
+  let totalMl = 0;
+  for (const pkg of Object.keys(state.packages)) {
+    const p = parseInt(pkg);
+    totalMl += p * (state.pkgCounts[p] || 1);
+  }
+  if (state.beerCustomAmount) totalMl += state.beerCustomAmount;
+
+  const targetDeg = state.btb2TargetDegree ?? state.btb2CustomTarget ?? null;
+
+  if (!beerAbv || totalMl <= 0 || !targetDeg) {
+    document.getElementById('btb2Result').style.display = 'none';
+    return;
+  }
+
+  const pure = calculatePureAlcohol(totalMl, beerAbv);
+  const result = calculateBaijiuEquivalent(pure, targetDeg);
+
+  document.getElementById('btb2Liang').textContent = result.liang;
+  document.getElementById('btb2Ml').textContent = result.ml;
+  document.getElementById('btb2PureAlcohol').textContent = result.pureAlcohol;
+  document.getElementById('btb2Metabolism').textContent = result.metabolism + '代谢';
+  document.getElementById('btb2ImpactText').textContent = result.impact;
+
+  const dot = document.getElementById('btb2ImpactDot');
+  dot.className = 'impact-dot impact-' + (result.impact === '轻度负担' ? 'low' : result.impact === '中度负担' ? 'mid' : 'high');
+
+  document.getElementById('btb2Result').style.display = 'block';
+}
+
+// ===== Helper: Update chip active states =====
+function updateChipActive(panelId, selector, activeValue) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  panel.querySelectorAll(selector).forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-abv') === activeValue || el.getAttribute('data-degree') === activeValue);
+  });
+}
+
+// ===== Disclaimer =====
+function toggleDisclaimer() {
+  const content = document.getElementById('disclaimerContent');
+  const btn = document.getElementById('disclaimerToggle');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    btn.innerHTML = '&#x300C;&#x9690;&#x79C1;&amp;&#x514D;&#x8D23;&#x58F0;&#x660E; &#x25BC;&#x300D;';
+  } else {
+    content.style.display = 'none';
+    btn.innerHTML = '&#x300C;&#x9690;&#x79C1;&amp;&#x514D;&#x8D23;&#x58F0;&#x660E; &#x25B2;&#x300D;';
+  }
+}
+
+// Auto-close disclaimer after 10s
+setTimeout(function() {
+  var c = document.getElementById('disclaimerContent');
+  var b = document.getElementById('disclaimerToggle');
+  if (c) { c.style.display = 'none'; }
+  if (b) { b.innerHTML = '&#x300C;&#x9690;&#x79C1;&amp;&#x514D;&#x8D23;&#x58F0;&#x660E; &#x25B2;&#x300D;'; }
+}, 10000);
+
+// ===== Init =====
+updateDirectionLabel();
+</script>
+</body>
 </html>
+                                                  
